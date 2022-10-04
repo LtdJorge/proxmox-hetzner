@@ -40,13 +40,13 @@ MY_SWAP=""
 #set size of cache partition or leave blank for autoconfig, USE NUMBER ONLY, will be in gbytes, 0 to disable
 MY_CACHE=""
 #set size of slog partition or leave blank for autoconfig, USE NUMBER ONLY, will be in gbytes, 0 to disable
-MY_SLOG=""
+MY_SLOG="0"
 #set size of boot partition or leave blank for autoconfig, will be in gbytes, 1GB or larger
 MY_BOOT="1"
 #set size of root partition, will be in gbytes, 10GB or larger
 MY_ROOT="40"
 #comment out to disable LVM and use a very simple partition setup of / and swap
-USE_LVM="TRUE"
+#USE_LVM="TRUE"
 
 ################################################################################
 
@@ -68,37 +68,37 @@ fi
 # autoselects the second drive to raid with sda
 # sda is always used, as sda is generally the primary boot disk
 # disables raid if a suitable second disk is not found
-if [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdb$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
-  MY_RAID_ENABLE="yes"
-  MY_RAID_SLAVE=",sdb"
-elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdc$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
-  MY_RAID_ENABLE="yes"
-  MY_RAID_SLAVE=",sdc"
-elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdd$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
-  MY_RAID_ENABLE="yes"
-  MY_RAID_SLAVE=",sdd"
-elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sde$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
-  MY_RAID_ENABLE="yes"
-  MY_RAID_SLAVE=",sde"
-elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdf$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
-  MY_RAID_ENABLE="yes"
-  MY_RAID_SLAVE=",sdf"
-else
+#if [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdb$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
+#  MY_RAID_ENABLE="yes"
+#  MY_RAID_SLAVE=",sdb"
+#elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdc$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
+#  MY_RAID_ENABLE="yes"
+#  MY_RAID_SLAVE=",sdc"
+#elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdd$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
+#  MY_RAID_ENABLE="yes"
+#  MY_RAID_SLAVE=",sdd"
+#elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sde$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
+#  MY_RAID_ENABLE="yes"
+#  MY_RAID_SLAVE=",sde"
+#elif [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdf$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]]; then
+#  MY_RAID_ENABLE="yes"
+#  MY_RAID_SLAVE=",sdf"
+#else
   MY_RAID_ENABLE="no"
   MY_RAID_SLAVE=""
-fi
+#fi
 #test for possible raid10, using 4 devices of equal size
-if [ "$MY_RAID_ENABLE" == "yes" ]; then
-  if [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdb$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] && [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdc$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] && [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdd$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] ; then
-    MY_RAID_LEVEL="10"
-    MY_RAID_SLAVE=",sdb,sdc,sdd"
-  else
-    MY_RAID_LEVEL="1"
-  fi
-  echo "RAID ENABLED"
-  echo "RAID Devices: sda${MY_RAID_SLAVE}"
-  echo "Set RAID level to ${MY_RAID_LEVEL}"
-fi
+#if [ "$MY_RAID_ENABLE" == "yes" ]; then
+#  if [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdb$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] && [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdc$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] && [[ $(awk '/sda$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) -eq $(awk '/sdd$/{printf "%i", $(NF-1) / 1000 / 1000}' /proc/partitions) ]] ; then
+#    MY_RAID_LEVEL="10"
+#    MY_RAID_SLAVE=",sdb,sdc,sdd"
+#  else
+#    MY_RAID_LEVEL="1"
+#  fi
+#  echo "RAID ENABLED"
+#  echo "RAID Devices: sda${MY_RAID_SLAVE}"
+#  echo "Set RAID level to ${MY_RAID_LEVEL}"
+#fi
 
 # check for ram size
 #if [[ $(( $(vmstat -s | grep -i "total memory" | xargs | cut -d" " -f 1) / 1024 / 1000)) -le "64" ]] ; then
